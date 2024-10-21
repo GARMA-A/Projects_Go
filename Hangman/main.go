@@ -14,8 +14,6 @@ import (
 )
 
 func main() {
-
-
 	// pick random word
 	source := rand.NewSource(time.Now().UnixNano())
 	random := rand.New(source)
