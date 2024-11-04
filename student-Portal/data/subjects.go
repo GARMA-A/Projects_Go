@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func StoreSubjectsToJsonFile() {
+func storeSubjectsToJsonFile() {
 
 	var Subjects = make([][]string, 8)
 

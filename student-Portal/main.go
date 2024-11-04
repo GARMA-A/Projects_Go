@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"studentPortal/data"
+	"studentPortal/commands"
+	// "studentPortal/data"
 )
 
 
@@ -10,8 +11,9 @@ import (
 
 func main(){
 
-	subjects ,err := data.SubjectsFromJsonToSlice()
+	cmd := commands.NewCmdFlag()
+	id ,ch , err := cmd.StartAsStudentOrDoctor()
 	fmt.Println(err)
-	fmt.Printf("%#v" , subjects)
+	fmt.Println(id ,ch)
 
 }
