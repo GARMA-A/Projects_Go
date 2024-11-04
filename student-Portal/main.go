@@ -1,19 +1,19 @@
 package main
 
-import (
-	"fmt"
-	"studentPortal/commands"
-	// "studentPortal/data"
-)
+// import "studentPortal/data"
+
+// "fmt"
+// "studentPortal/commands"
+// "studentPortal/data"
+
 
 
 
 
 func main(){
 
-	cmd := commands.NewCmdFlag()
-	id ,ch , err := cmd.StartAsStudentOrDoctor()
-	fmt.Println(err)
-	fmt.Println(id ,ch)
-
+	// cmd := commands.NewCmdFlag()
+	// id ,ch , err := cmd.StartAsStudentOrDoctor()
+	// fmt.Println(err)
+	// fmt.Println(id ,ch)
 }

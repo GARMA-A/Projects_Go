@@ -8,7 +8,7 @@ import (
 
 func storeSubjectsToJsonFile() {
 
-	var Subjects = make([][]string, 8)
+	var Subjects = make([][]string, 0)
 
 	Subjects = append(Subjects, []string{"Calculas0", "Esp0"})
 
@@ -61,16 +61,16 @@ func storeSubjectsToJsonFile() {
 		"robotics application",
 		"deep learning", "professional trainingIII"})
 
-	jsonData, err := json.MarshalIndent(Subjects, "", "   ")
+	json, err := json.MarshalIndent(Subjects, "", "   ")
 	if err != nil {
 		fmt.Println(err)
 	}
-	file, err := os.Create("subjects.json")
+	file, err := os.Create("json/subjects.json")
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer file.Close()
-	_, err = file.Write(jsonData)
+	_, err = file.Write(json)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -78,15 +78,15 @@ func storeSubjectsToJsonFile() {
 }
 
 func SubjectsFromJsonToSlice() ([][]string, error) {
-	data, err := os.ReadFile("subjects.json")
+	data, err := os.ReadFile("json/subjects.json")
 	// file , err := os.Open("subjects.json")
 	if err != nil {
 		return nil, err
 	}
-       //  defer file.Close()
+	//  defer file.Close()
 	var subjects [][]string
 	//  if err := json.NewDecoder(file).Decode(&subjects) ; err != nil
-	if err := json.Unmarshal(data , &subjects); err != nil {
+	if err := json.Unmarshal(data, &subjects); err != nil {
 		return nil, err
 	}
 	return subjects, nil
