@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+
+// Hard Code the all semesters subjects and store them as json (use only once)
 func storeSubjectsToJsonFile() {
 
 	var Subjects = make([][]string, 0)
@@ -77,6 +79,9 @@ func storeSubjectsToJsonFile() {
 	fmt.Println("Subjects written to subjects.json succesfully !")
 }
 
+
+// i need on many areas of the application to access the subjects 
+// so i create func take all the subjects from json and return slice
 func SubjectsFromJsonToSlice() ([][]string, error) {
 	data, err := os.ReadFile("json/subjects.json")
 	// file , err := os.Open("subjects.json")

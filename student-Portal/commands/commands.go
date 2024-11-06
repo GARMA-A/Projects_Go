@@ -10,6 +10,7 @@ type Commands struct {
 	doctor  string
 }
 
+// take the -s or -d and the id for entering student or doctor mode
 func NewCmdFlag() *Commands {
 
 	newCommand := Commands{}
@@ -22,14 +23,14 @@ func NewCmdFlag() *Commands {
 	return &newCommand
 
 }
-
-func (c *Commands) StartAsStudentOrDoctor() (string , string , error) {
+// method from commands struct to start the student or doctor mode
+func (c *Commands) StartAsStudentOrDoctor() (string, string, error) {
 	switch {
 	case c.student != "":
-		return c.student,"s",nil
+		return c.student, "s", nil
 	case c.doctor != "":
-		return c.doctor,"d",nil
+		return c.doctor, "d", nil
 	default:
-		return "","nop!", errors.New("no id was passed")
+		return "", "nop!", errors.New("no id was passed")
 	}
 }

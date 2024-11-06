@@ -8,20 +8,19 @@ import (
 	"github.com/aquasecurity/table"
 )
 
-
-
-type subjectName string
-type grade string
+type SubjectName string
+type Grade string
 
 type Student struct {
-	Gpa             float32               // doctor // Done
-	CurrentSemester int                   // not optional // Done
-	HoursCompleted  string                // not optional
-	Grades          map[subjectName]grade // doctor
-	LateCourses     []subjectName         // doctor
+	Gpa             float32               // doctor privilege
+	CurrentSemester int                   // student not optional
+	HoursCompleted  string                // student not optional
+	Grades          map[SubjectName]Grade // doctor privilege
+	LateCourses     []SubjectName         // doctor privilege
 	basicdata.BasicData
 }
 
+// I need to show something whenever the program start with (-s id)
 func StudentStartScreen(name, id string) {
 	fmt.Printf(`         Welcome %s , you are already stored in our memory
 	 and your id is %s welcome back! .  
@@ -33,14 +32,18 @@ func StudentStartScreen(name, id string) {
 	 ---------------------------------------------------------`+"\n", name, id)
 }
 
-
+// I need to print the current shedule for each student based on the
+// current semester 
 func (s *Student) SeeYourShedule() {
 	// TODO COMPLETE THIS FUNC
 	t := table.New(os.Stdout)
 	t.SetHeaders("1", "2", "3", "4", "5", "6", "7", "8", "9", "11", "12")
 
 }
-// this is ok as it is not constructor pass by student
-func (s *Student) AddLateCourses(course ...subjectName) {
+
+// This function should use by admin (doctor) only
+// there is another func named WithLateCourses this is
+// the method version of it for simplicity
+func (s *Student) AddLateCourses(course ...SubjectName) {
 	s.LateCourses = append(s.LateCourses, course...)
 }

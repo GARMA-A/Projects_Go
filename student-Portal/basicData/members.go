@@ -19,6 +19,7 @@ type Doctor struct {
 
 type OptionalArguments func(*BasicData)
 
+// basic data that is on doctor or student with must! parameters and optional ones
 func NewBasicData(name string, dateOfBirht time.Time, id string, stuentOptionalData ...OptionalArguments) *BasicData {
 	BasicData := &BasicData{Name: name, DateOfBirth: dateOfBirht, Id: id}
 	BasicData.Age = int(time.Now().Year() - dateOfBirht.Year())
@@ -27,42 +28,25 @@ func NewBasicData(name string, dateOfBirht time.Time, id string, stuentOptionalD
 	}
 	return BasicData
 }
+
+// basic data (Phone) optional  func to pass for student of doctor
 func WithPhoneNumber(phone string) OptionalArguments {
 	return func(b *BasicData) {
 		b.Phone = phone
 	}
-
 }
 
+// basic data (Gender) optional func to pass for student docotr
 func WithGender(gender string) OptionalArguments {
 	return func(b *BasicData) {
 		b.Gender = gender
 	}
 }
 
+
+// basic data (Address) optional func to pass for doctor
 func WithAddress(address string) OptionalArguments {
 	return func(b *BasicData) {
 		b.Address = address
 	}
 }
-
-// Doctor feature
-// func WithLateCourses(subs ...subjectName) optionalArguments {
-// 	return func(s *Student) {
-// 		s.LateCourses = append(s.LateCourses, subs...)
-// 	}
-// }
-
-// Doctor feature
-// func WithGrades(grades map[subjectName]grade) optionalArguments {
-// 	return func(s *Student) {
-// 		if s.Grades == nil {
-// 			s.Grades = make(map[subjectName]grade)
-// 		}
-// 		for k, v := range grades {
-
-// 			s.Grades[k] = v
-// 		}
-
-// 	}
-// }
