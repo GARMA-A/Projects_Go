@@ -14,7 +14,7 @@ type Grade string
 type Student struct {
 	Gpa             float32               // doctor privilege
 	CurrentSemester int                   // student not optional
-	HoursCompleted  string                // student not optional
+	HoursCompleted  int                // student not optional
 	Grades          map[SubjectName]Grade // doctor privilege
 	LateCourses     []SubjectName         // doctor privilege
 	basicdata.BasicData

@@ -1,5 +1,7 @@
 package main
 
+import "studentPortal/commands"
+
 // import "studentPortal/data"
 
 // "fmt"
@@ -8,12 +10,25 @@ package main
 
 /*****************************/
 // some notes you create the basic data struct also insert it into
-// student and doctor and create newBasicData functions that will
+// student and doctor and create new functions that will
 // take all basic data and  return struct of it your next metion
 // is to implement it on the system to create newStudent newDoctor
 // Good luck!
 /*****************************/
 
+
+func init(){
+	flag := commands.NewCmdFlag()
+	id,sOrD,err := flag.StartAsStudentOrDoctor()
+	if err != nil {
+		return 
+	}
+	if sOrD == "s"{
+
+	}
+
+
+}
 
 
 

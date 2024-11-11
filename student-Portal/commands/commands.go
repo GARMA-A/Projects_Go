@@ -24,7 +24,7 @@ func NewCmdFlag() *Commands {
 
 }
 // method from commands struct to start the student or doctor mode
-func (c *Commands) StartAsStudentOrDoctor() (string, string, error) {
+func (c *Commands) StartAsStudentOrDoctor() (id string,sOrD string,err error) {
 	switch {
 	case c.student != "":
 		return c.student, "s", nil
