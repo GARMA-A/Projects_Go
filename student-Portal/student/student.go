@@ -12,11 +12,11 @@ type SubjectName string
 type Grade string
 
 type Student struct {
-	Gpa             float32               // doctor privilege
-	CurrentSemester int                   // student not optional
-	HoursCompleted  int                // student not optional
-	Grades          map[SubjectName]Grade // doctor privilege
-	LateCourses     []SubjectName         // doctor privilege
+	Gpa             float32               `json:"Gpa,omitempty"`             // doctor privilege
+	CurrentSemester int                   `json:"CurrentSemester,omitempty"` // student not optional
+	HoursCompleted  int                   `json:"HoursCompleted,omitempty"`  // student not optional
+	Grades          map[SubjectName]Grade `json:"Grades,omitempty"`          // doctor privilege
+	LateCourses     []SubjectName         `json:"LateCourses,omitempty"`     // doctor privilege
 	basicdata.BasicData
 }
 
@@ -33,7 +33,7 @@ func StudentStartScreen(name, id string) {
 }
 
 // I need to print the current shedule for each student based on the
-// current semester 
+// current semester
 func (s *Student) SeeYourShedule() {
 	// TODO COMPLETE THIS FUNC
 	t := table.New(os.Stdout)
