@@ -3,11 +3,20 @@ package commands
 import (
 	"errors"
 	"flag"
+	"os"
+	"os/exec"
 )
 
 type Commands struct {
 	student string
 	doctor  string
+}
+
+//  Note that only work for linux 
+func ClearConsole() {
+	var cmd  *exec.Cmd = exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }
 
 // take the -s or -d and the id for entering student or doctor mode

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	basicdata "studentPortal/basicData"
+	"studentPortal/commands"
 	"studentPortal/student"
 	"time"
 )
@@ -33,21 +34,7 @@ func WithGrades(grades map[*student.SubjectName]student.Grade) optionalStaffStud
 // This function adds a new student to the students.json file.
 // It reads the existing students from the file, appends the new student to the list,
 // and then writes the updated list back to the file.
-func AddStudent(name string, dateOfBirth time.Time,
-	id string, GPA float32,
-	CurrentSemester int, HoursCompleted int,
-	LateCourses []student.SubjectName,
-	studentOptionalData ...basicdata.OptionalArguments) error {
-
-	myBasicData := basicdata.NewBasicData(name,
-		dateOfBirth, id, studentOptionalData...)
-
-	myStudent := student.Student{
-		BasicData:       *myBasicData,
-		Gpa:             GPA,
-		CurrentSemester: CurrentSemester,
-		HoursCompleted:  HoursCompleted,
-		LateCourses:     LateCourses}
+func AddStudent(newstudent student.Student) error {
 
 	fileData, err2 := os.ReadFile("../json/students.json")
 	if err2 != nil {
@@ -63,7 +50,7 @@ func AddStudent(name string, dateOfBirth time.Time,
 		}
 	}
 	// Append new data to the existing data
-	existingData = append(existingData, myStudent)
+	existingData = append(existingData, newstudent)
 
 	updatedData, err := json.MarshalIndent(existingData, "", "   ")
 	if err != nil {
@@ -78,8 +65,11 @@ func AddStudent(name string, dateOfBirth time.Time,
 	return nil
 
 }
-
-func DocotrStartScreen(currentDoctor basicdata.Doctor) {
+// so here is the problem when you hit 'r' after press 1 to add student 
+// it return succesful but when you enter 1 again do not go again to 
+// option one function please fix this problem 
+func DocotrStartScreen(currentDoctor basicdata.Doctor) string {
+	commands.ClearConsole()
 	fmt.Printf(`         Welcome %s , you are already stored in our memory
 	 and your id is %s welcome back! .  
 	 ---------------------------------------------------------
@@ -88,12 +78,73 @@ func DocotrStartScreen(currentDoctor basicdata.Doctor) {
 	 3) add attendance
 	 4) add grades
 	 ---------------------------------------------------------`+"\n", currentDoctor.Name, currentDoctor.Id)
+	var ch string
+	fmt.Print("Enter choice : ")
+	fmt.Scanf("%s", &ch)
+	return ch
+
 }
 
+func OptionScreen(option string, currentDoctor basicdata.Doctor) {
+	switch option {
+	case "1":
+		OptionOneOnDoctor(currentDoctor)
+	default:
+		print("This is bad input not 1,2,3 or 4")
+		fmt.Scanln()
+		DocotrStartScreen(currentDoctor)
+	}
+}
 
-func AddDoctor(){
+func OptionOneOnDoctor(currentDoctor basicdata.Doctor) {
+	var innerSwitchOption string
+	commands.ClearConsole()
+	fmt.Print("Ok to add a new student you will need to enter the \n (name ,date of birth, id)  and there is some optional staff like \n (phone number , gender , address) \n are you want to complete ?")
+	fmt.Print("Press 'c' to complete or press 'r' to return :")
+	fmt.Scanf("%s", &innerSwitchOption)
+	if innerSwitchOption == "r" {
+		DocotrStartScreen(currentDoctor)
+	} else if innerSwitchOption == "c" {
+		commands.ClearConsole()
+		var newStudent student.Student
+		fmt.Printf("So please enter the name of the student : ")
+		fmt.Scanf("%s:", newStudent.Name)
+		var birthDateStr string
+	takeTheBirthDate:
+	       fmt.Printf("So please enter student birth date (YYYY-MM-DD) : ")
+		fmt.Scanf("%s:", &birthDateStr)
+		realBirthDate, err := time.Parse("2006-01-02", birthDateStr)
+		if err != nil {
+			print("there is error on this birth date format please enter the date like this (YYYY-MM-DD) ", err)
+			fmt.Scan()
+			commands.ClearConsole()
+			goto takeTheBirthDate
+		}
+		newStudent.DateOfBirth = realBirthDate
+		fmt.Printf("Now enter the id : ")
+		fmt.Scanf("%s", &newStudent.Id)
+		fmt.Printf("Very good now the student data is \n Name : %s  \n Birth Date %s  \n  Id : %s ", newStudent.Name, newStudent.DateOfBirth.Format("2006-01-02"), newStudent.Id)
+		fmt.Printf("\nTo continue press enter ... ")
+		fmt.Scan()
+		err2 := AddStudent(newStudent)
+		if err2 != nil {
+			print(err2)
+		} else {
 
-	var newDoc basicdata.Doctor = basicdata.Doctor{BasicData: basicdata.BasicData{Name: "girgis" , Id: "1" , Age: 20 , Gender: "male" }}
+			fmt.Println("student added succefully!")
+		}
+		fmt.Scan()
+		commands.ClearConsole()
+
+	} else {
+		print("Invalid Option...")
+		fmt.Scan()
+		OptionOneOnDoctor(currentDoctor)
+	}
+}
+func AddDoctor() {
+
+	var newDoc basicdata.Doctor = basicdata.Doctor{BasicData: basicdata.BasicData{Name: "girgis", Id: "1", Age: 20, Gender: "male"}}
 	var sliceDoc []basicdata.Doctor = []basicdata.Doctor{newDoc}
 	jsonData, err := json.Marshal(sliceDoc)
 	if err != nil {

@@ -2,12 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	basicdata "studentPortal/basicData"
 	"studentPortal/commands"
 	"studentPortal/doctor"
 	"studentPortal/student"
 	"time"
+
 )
 
 // import "studentPortal/data"
@@ -68,14 +70,14 @@ func main() {
 			return
 		}
 		var jsonData []basicdata.Doctor
-		var foundedDoctor basicdata.Doctor
 		json.Unmarshal(fileData, &jsonData)
-		for _, obj := range jsonData {
-			if obj.BasicData.Id == id {
+		for _, curDoctor := range jsonData {
+			if curDoctor.BasicData.Id == id {
 				println("Found succesfully loading your page....")
 				time.Sleep(time.Second * 3)
-				foundedDoctor = obj
-				doctor.DocotrStartScreen(foundedDoctor)
+				var option string = doctor.DocotrStartScreen(curDoctor)
+				fmt.Scan()
+				doctor.OptionScreen(option ,curDoctor)
 				found = true
 				break
 			}
