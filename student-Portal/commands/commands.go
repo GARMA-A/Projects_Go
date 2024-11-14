@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"bufio"
 	"errors"
 	"flag"
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -17,6 +19,11 @@ func ClearConsole() {
 	var cmd  *exec.Cmd = exec.Command("clear")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
+}
+// pause functionalty
+func Pause(message ...any){
+	fmt.Println(message...)
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
 
 // take the -s or -d and the id for entering student or doctor mode

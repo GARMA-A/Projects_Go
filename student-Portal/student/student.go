@@ -20,8 +20,10 @@ type Student struct {
 	basicdata.BasicData
 }
 
+var GlobalCurrentStudent Student
+
 // I need to show something whenever the program start with (-s id)
-func StudentStartScreen(currentStudent Student) {
+func StudentStartScreen() {
 	fmt.Printf(`         Welcome %s , you are already stored in our memory
 	 and your id is %s welcome back! .  
 	 ---------------------------------------------------------
@@ -29,7 +31,7 @@ func StudentStartScreen(currentStudent Student) {
 	 2) calculate GPA
 	 3) see semester subjects
 	 4) see any tasks asssign to you
-	 ---------------------------------------------------------`+"\n",currentStudent.Name , currentStudent.Id)
+	 ---------------------------------------------------------`+"\n",GlobalCurrentStudent.Name , GlobalCurrentStudent.Id)
 }
 
 // I need to print the current shedule for each student based on the
