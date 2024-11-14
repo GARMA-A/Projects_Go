@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	basicdata "studentPortal/basicData"
+	"studentPortal/commands"
 
 	"github.com/aquasecurity/table"
 )
@@ -31,7 +32,20 @@ func StudentStartScreen() {
 	 2) calculate GPA
 	 3) see semester subjects
 	 4) see any tasks asssign to you
-	 ---------------------------------------------------------`+"\n",GlobalCurrentStudent.Name , GlobalCurrentStudent.Id)
+	 5) Exit
+	 ---------------------------------------------------------`+"\n", GlobalCurrentStudent.Name, GlobalCurrentStudent.Id)
+
+}
+
+func OptionScreenForStudent(option string) {
+	switch option {
+	case "5":
+		os.Exit(0)
+	default:
+		commands.Pause("Invalid Option...")
+		StudentStartScreen()
+	}
+
 }
 
 // I need to print the current shedule for each student based on the

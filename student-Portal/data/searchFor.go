@@ -25,18 +25,18 @@ func WriteJSONToFile(filename string, data interface{}) error {
 }
 
 // Not competed need to do it
-func SearchForTheId(SorD string, id string) (bool, error) {
+func SearchForTheId(SorD string, id string) (found bool ,index int, err error) {
 
 	if strings.ToLower(SorD)[0] == 's' {
 		var dataComeFromJsonFile []student.Student
 		data, err := os.ReadFile("json/students.json")
 		json.Unmarshal(data, &dataComeFromJsonFile)
 		if err != nil {
-			return false, errors.New("cannot read the file searchfortheid func")
+			return false, 0,errors.New("cannot read the file searchfortheid func")
 		}
-		for _, obj := range dataComeFromJsonFile {
+		for i, obj := range dataComeFromJsonFile {
 			if obj.Id == id {
-				return true, nil
+				return true,i, nil
 			}
 		}
 	} else {
@@ -45,13 +45,13 @@ func SearchForTheId(SorD string, id string) (bool, error) {
 		data, err := os.ReadFile("json/doctors.json")
 		json.Unmarshal(data, &dataComeFromJsonFile)
 		if err != nil {
-			return false, errors.New("cannot read the file searchfortheid func")
+			return false,0, errors.New("cannot read the file searchfortheid func")
 		}
-		for _, obj := range dataComeFromJsonFile {
+		for i, obj := range dataComeFromJsonFile {
 			if obj.Id == id {
-				return true, nil
+				return true, i,nil
 			}
 		}
 	}
-	return false, nil
+	return false,0, nil
 }

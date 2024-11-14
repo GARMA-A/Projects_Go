@@ -74,6 +74,33 @@ func AddStudent(newstudent student.Student, fileRelativePath string) error {
 
 }
 
+func DeleteStudent(index int) {
+
+	fileByteSlice, err := os.ReadFile("json/students.json")
+	if err != nil {
+		commands.Pause(err)
+	}
+	var jsonFileData []student.Student
+	err = json.Unmarshal(fileByteSlice, &jsonFileData)
+	if err != nil {
+		commands.Pause(err)
+	}
+	if index < 0 || index >= len(jsonFileData) {
+		commands.Pause(fmt.Errorf("index out of range"))
+		return
+	}
+	jsonFileData = append(jsonFileData[:index], jsonFileData[index+1:]...)
+	fileByteSlice, err = json.MarshalIndent(jsonFileData, "", "   ")
+	if err != nil {
+		commands.Pause(err)
+	}
+	err = os.WriteFile("json/students.json", fileByteSlice, 0644)
+	if err != nil {
+		commands.Pause(err)
+	}
+
+}
+
 // so here is the problem when you hit 'r' after press 1 to add student
 // it return succesful but when you enter 1 again do not go again to
 // option one function please fix this problem
@@ -86,6 +113,7 @@ func DocotrStartScreen() {
 	 2) delete student  
 	 3) add attendance
 	 4) add grades
+	 5) Exit
 	 ---------------------------------------------------------`+"\n", GlobalCurrentDoctor.Name, GlobalCurrentDoctor.Id)
 	var ch string
 	fmt.Print("Enter choice : ")
@@ -97,6 +125,10 @@ func OptionScreenForDoctor(option string) {
 	switch option {
 	case "1":
 		OptionOneOnDoctor()
+	case "2":
+		OptionTwoOnDoctor()
+	case "5":
+		os.Exit(0)
 	default:
 		commands.Pause("This is bad input not 1,2,3 or 4")
 		DocotrStartScreen()
@@ -140,7 +172,7 @@ func OptionOneOnDoctor() {
 	enterTheId:
 		fmt.Printf("Now enter the id : ")
 		fmt.Scanf("%s", &newStudent.Id)
-		found, err := data.SearchForTheId("s", newStudent.Id)
+		found, _, err := data.SearchForTheId("s", newStudent.Id)
 		if err != nil {
 			commands.Pause(err)
 			print("\nThe optionOneOnDoctor func")
@@ -167,6 +199,55 @@ func OptionOneOnDoctor() {
 		OptionOneOnDoctor()
 	}
 }
+
+func OptionTwoOnDoctor() {
+startOfTheFunc:
+	var innerOption, id string
+	commands.ClearConsole()
+	fmt.Printf("To delete student please enter et's ID (to cancel enter r) : ")
+	fmt.Scan(&id)
+	if id[0] == 'r' {
+		commands.ClearConsole()
+		DocotrStartScreen()
+	}
+	found, index, err := data.SearchForTheId("s", id)
+	if err != nil {
+		commands.Pause(err)
+	}
+	if found {
+		fmt.Print("The Id was found! are you sure you want to delete \n press 'd' for delete or 'r' for return : ")
+		fmt.Scan(&innerOption)
+		switch innerOption {
+		case "d":
+			DeleteStudent(index)
+			commands.Pause("The student Deleted succesfully ")
+			commands.ClearConsole()
+			DocotrStartScreen()
+		case "r":
+			commands.Pause("Return to the start screen ")
+			DocotrStartScreen()
+		default:
+			commands.Pause("Invalid Option...")
+			goto startOfTheFunc
+		}
+	} else {
+		commands.Pause("There is no such id on the file ! \n press 't' for try again \n press 'r' for retuen to main screen")
+		fmt.Scan(&innerOption)
+		switch innerOption {
+		case "t":
+			commands.ClearConsole()
+			goto startOfTheFunc
+              case "r":
+			commands.ClearConsole()
+			DocotrStartScreen()
+		default:
+			commands.Pause("Invalid option...")
+		}
+	}
+
+}
+
+
 func AddDoctor(newDoc basicdata.Doctor, filerelativePath string) {
 
 	olddata, err2 := os.ReadFile(filerelativePath)
