@@ -3,6 +3,7 @@ package doctor
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	basicdata "studentPortal/basicData"
 	"studentPortal/student"
@@ -29,15 +30,17 @@ func WithGrades(grades map[*student.SubjectName]student.Grade) optionalStaffStud
 	}
 }
 
-// Not complete yet finish it you have a location on json called students to append the newStudent to it
-func AddStudent(name string, dateOfBirht time.Time,
+// This function adds a new student to the students.json file.
+// It reads the existing students from the file, appends the new student to the list,
+// and then writes the updated list back to the file.
+func AddStudent(name string, dateOfBirth time.Time,
 	id string, GPA float32,
 	CurrentSemester int, HoursCompleted int,
 	LateCourses []student.SubjectName,
-	stuentOptionalData ...basicdata.OptionalArguments) error {
+	studentOptionalData ...basicdata.OptionalArguments) error {
 
 	myBasicData := basicdata.NewBasicData(name,
-		dateOfBirht, id, stuentOptionalData...)
+		dateOfBirth, id, studentOptionalData...)
 
 	myStudent := student.Student{
 		BasicData:       *myBasicData,
@@ -48,7 +51,7 @@ func AddStudent(name string, dateOfBirht time.Time,
 
 	fileData, err2 := os.ReadFile("../json/students.json")
 	if err2 != nil {
-		return errors.New("connot read ../json/student.json file")
+		return errors.New("cannot read ../json/students.json file")
 	}
 
 	// Unmarshal existing JSON data into a slice of Person objects
@@ -56,7 +59,7 @@ func AddStudent(name string, dateOfBirht time.Time,
 	if len(fileData) > 0 { // Check if file is not empty
 		err := json.Unmarshal(fileData, &existingData)
 		if err != nil {
-			return errors.New("cannot unmarshal file data from : addstudent func")
+			return errors.New("cannot unmarshal file data in AddStudent function")
 		}
 	}
 	// Append new data to the existing data
@@ -64,14 +67,43 @@ func AddStudent(name string, dateOfBirht time.Time,
 
 	updatedData, err := json.MarshalIndent(existingData, "", "   ")
 	if err != nil {
-		return errors.New("cannot marshal addStudent func")
+		return errors.New("cannot marshal updated student data in AddStudent function")
 	}
 	err3 := os.WriteFile("../json/students.json", updatedData, 0644)
 
 	if err3 != nil {
-		return errors.New("cannot write the new student to a json file")
+		return errors.New("cannot write the updated student data to the JSON file")
 	}
 
 	return nil
 
+}
+
+func DocotrStartScreen(currentDoctor basicdata.Doctor) {
+	fmt.Printf(`         Welcome %s , you are already stored in our memory
+	 and your id is %s welcome back! .  
+	 ---------------------------------------------------------
+	 1) add student  
+	 2) delete student  
+	 3) add attendance
+	 4) add grades
+	 ---------------------------------------------------------`+"\n", currentDoctor.Name, currentDoctor.Id)
+}
+
+
+func AddDoctor(){
+
+	var newDoc basicdata.Doctor = basicdata.Doctor{BasicData: basicdata.BasicData{Name: "girgis" , Id: "1" , Age: 20 , Gender: "male" }}
+	var sliceDoc []basicdata.Doctor = []basicdata.Doctor{newDoc}
+	jsonData, err := json.Marshal(sliceDoc)
+	if err != nil {
+		fmt.Println("Error marshaling doctor data:", err)
+		return
+	}
+	fmt.Println("Doctor data:", string(jsonData))
+	err = os.WriteFile("json/doctors.json", jsonData, 0644)
+	if err != nil {
+		fmt.Println("Error writing doctor data to file:", err)
+		return
+	}
 }
