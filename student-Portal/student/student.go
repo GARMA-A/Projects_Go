@@ -1,6 +1,7 @@
 package student
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	basicdata "studentPortal/basicData"
@@ -28,17 +29,19 @@ func StudentStartScreen() {
 	fmt.Printf(`         Welcome %s , you are already stored in our memory
 	 and your id is %s welcome back! .  
 	 ---------------------------------------------------------
-	 1) see your schedule
-	 2) calculate GPA
-	 3) see semester subjects
-	 4) see any tasks asssign to you
-	 5) Exit
-	 ---------------------------------------------------------`+"\n", GlobalCurrentStudent.Name, GlobalCurrentStudent.Id)
-
+	 1) calculate GPA
+	 2) see semester subjects
+	 3) see any assignments asssign to you
+	 4) Exit
+	 --------------------------------------------------------`+"\n", GlobalCurrentStudent.Name, GlobalCurrentStudent.Id)
+	var option string
+	fmt.Scan(&option)
+	OptionScreenForStudent(option)
 }
-
 func OptionScreenForStudent(option string) {
 	switch option {
+	case "2":
+		SeeStudentSmesters()
 	case "5":
 		os.Exit(0)
 	default:
@@ -55,6 +58,60 @@ func (s *Student) SeeYourShedule() {
 	t := table.New(os.Stdout)
 	t.SetHeaders("1", "2", "3", "4", "5", "6", "7", "8", "9", "11", "12")
 
+}
+
+func SeeStudentSmesters() {
+startOfTheFunc:
+	commands.ClearConsole()
+	var semesterNumber int
+	fmt.Print("Plaease enter the semmester you want to see : ")
+	fmt.Scan(&semesterNumber)
+	var subjects [][]string
+	byteFileData, err := os.ReadFile("json/subjects.json")
+	if err != nil {
+		commands.Pause(err)
+	}
+	err = json.Unmarshal(byteFileData, &subjects)
+	if err != nil {
+		commands.Pause(err)
+	}
+	t := table.New(os.Stdout)
+	t.SetHeaders("Subject Name", "Credet Hours")
+	switch semesterNumber {
+	case 0:
+		addTheRows(t, subjects[0])
+	case 1:
+		addTheRows(t, subjects[1])
+	case 2:
+		addTheRows(t, subjects[2])
+	case 3:
+		addTheRows(t, subjects[3])
+	case 4:
+		addTheRows(t, subjects[4])
+	case 5:
+		addTheRows(t, subjects[5])
+	case 6:
+		addTheRows(t, subjects[6])
+	case 7:
+		addTheRows(t, subjects[7])
+	case 8:
+		addTheRows(t, subjects[8])
+	default:
+		commands.Pause("Invalid input...")
+		goto startOfTheFunc
+	}
+	t.Render()
+	commands.Pause("Return to the main screen ")
+	commands.ClearConsole()
+	StudentStartScreen()
+
+}
+
+func addTheRows(t *table.Table, subjects []string) {
+
+	for _, el := range subjects {
+		t.AddRow(el, "3.0")
+	}
 }
 
 // This function should use by admin (doctor) only
