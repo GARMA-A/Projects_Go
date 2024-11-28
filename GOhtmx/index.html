@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://unpkg.com/htmx.org@2.0.3"
+      integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+      crossorigin="anonymous"
+    ></script>
+    <title>GoHtmx</title>
+  </head>
+  <body class="container">
+    <div class="row mt-4 g-4">
+      <div class="col-8">
+        <h1 class="mb-4">Film List</h1>
+
+        <ul class="list-group fs-5 me-5" id="film-list">
+          {{ range .films }}
+          <li class="list-group-item bg-primary text-white">
+            {{ .Title }} - {{ .Director }}
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <div class="col-4">
+        <h1 class="mb-4">Add Film</h1>
+
+        <form hx-post="/add-film/" hx-target="#film-list" hx-swap="beforeend">
+          <div class="mb-2">
+            <label for="film-title">Title</label>
+            <input
+              type="text"
+              name="title"
+              id="film-title"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="film-director">Director</label>
+            <input
+              type="text"
+              name="director"
+              id="film-director"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <span
+              class="spinner-border spinner-border-sm htmx-indicator d-none"
+              id="spinner"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
