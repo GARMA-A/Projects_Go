@@ -1,9 +1,7 @@
 package types
 
 type ToDo struct {
-	ID        int    `json:"id"`
+	ID        string `json:"id" bson:"_id"`
 	Task      string `json:"task"`
 	Completed bool   `json:"completed"`
 }
-
-var Todos = []ToDo{}

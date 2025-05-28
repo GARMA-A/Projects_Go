@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"slices"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -10,15 +9,12 @@ import (
 )
 
 func DeleteTodo(c *fiber.Ctx) error {
-	todos := types.Todos
 	id := c.Params("id")
-
-	for i, todo := range todos {
-		if fmt.Sprint(todo.ID) == id {
-			types.Todos = slices.Delete(types.Todos, i, i+1)
-			return c.Status(200).JSON(fiber.Map{"message": "todo deleted successfully"})
-		}
+	collection := types.CurrentCollection(types.GlobalClient)
+	_, err := collection.DeleteOne(c.Context(), fiber.Map{"id": id})
+	if err != nil {
+		fmt.Println("Error deleting todo:", err)
+		return c.Status(500).JSON(fiber.Map{"error": "failed to delete todo"})
 	}
-
-	return c.Status(404).JSON(fiber.Map{"error": "todo not found"})
+	return c.Status(200).JSON(fiber.Map{"message": "todo deleted successfully"})
 }

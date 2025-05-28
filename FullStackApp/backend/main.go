@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
@@ -8,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/GARMA-A/Projects_Go/controllers"
+	"github.com/GARMA-A/Projects_Go/types"
 )
 
 func main() {
@@ -17,6 +19,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
+	Port := os.Getenv("PORT")
+
+	client, err := types.ConnectToMongoDB()
+	if err != nil {
+		log.Fatalf("Error connecting to MongoDB: %v", err)
+	} else {
+		log.Println("Connected to MongoDB successfully")
+	}
+	defer client.Disconnect(context.Background())
+	types.GlobalClient = client
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{"msg": "Hello, World!"})
@@ -29,8 +41,6 @@ func main() {
 	app.Put("/update_todo/:id", controllers.UpdateTodo)
 
 	app.Delete("/delete_todo/:id", controllers.DeleteTodo)
-
-	Port := os.Getenv("PORT")
 
 	log.Fatal(app.Listen(":" + Port))
 }
