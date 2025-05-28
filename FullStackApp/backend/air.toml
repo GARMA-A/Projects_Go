@@ -1,0 +1,9 @@
+root="."
+tmp_dir="tmp"
+[build]
+bin="main"
+cmd="go build -o main main.go"A
+exclude=["tmp/*", "vendor" , "client/*"]
+include=["**/*.go"]
+ignore=[".git", ".gitignore", "README.md", "LICENSE", "air.toml" , "tmp/*", "vendor/*", "client/*"]
+
