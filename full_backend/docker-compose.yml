@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: "workout_db"
+    image: "postgres:12.4-alpine"
+    volumes:
+      - "./database/postgres-data:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    restart: unless-stopped
+  # backend:
+  #   container_name: "workout_golang_server"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: ["./app"]
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     DB_HOST: db
+  #     DB_PORT: 5432
+  #     DB_USER: postgres
+  #     DB_PASSWORD: postgres
+  #     DB_NAME: postgres

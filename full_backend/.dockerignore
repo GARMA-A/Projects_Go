@@ -1,0 +1,17 @@
+
+# Ignore Postgres data directory
+database/postgres-data
+
+# Ignore git stuff
+.git
+.gitignore
+
+# Ignore editor configs
+.vscode
+.idea
+
+# Ignore local binaries
+bin
+*.exe
+*.out
+*.o
