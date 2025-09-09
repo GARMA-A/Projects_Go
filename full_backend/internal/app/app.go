@@ -19,19 +19,23 @@ type Application struct {
 }
 
 func NewApplication() (*Application, error) {
-	// our stores will go here
 	pgDB, err := store.Open()
 	if err != nil {
 		return nil, fmt.Errorf("app: NewApplication: %w", err)
 	}
-	// our handlers will go here
+
 	err = store.MigrateFs(pgDB, migrations.FS, ".")
 	if err != nil {
 		panic(err)
 	}
-	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	workoutHandler := api.NewWorkoutHandler()
+	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+	// our stores will go here
+	workoutStore := store.NewPostgresWorkoutStore(pgDB)
+
+	// our handlers will go here
+
+	workoutHandler := api.NewWorkoutHandler(workoutStore)
 
 	app := &Application{
 		Logger:         logger,

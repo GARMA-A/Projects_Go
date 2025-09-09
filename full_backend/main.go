@@ -32,5 +32,4 @@ func main() {
 	if err != nil {
 		myapp.Logger.Fatal(err)
 	}
-
 }
