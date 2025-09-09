@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -14,8 +15,6 @@ import (
 )
 
 func main() {
-
-
 	// pick random word
 	source := rand.NewSource(time.Now().UnixNano())
 	random := rand.New(source)
@@ -29,17 +28,16 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	gussedLetters := make(map[string]bool)
 
-	// start the game 
+	// start the game
 	fmt.Println("Welcome to hangman game...")
 	time.Sleep(4 * time.Second)
 
 	for attempts > 0 {
 		clearConsole()
-		// print the ascii code draw 
-		fmt.Println(AsciiStatesDrawHangman[attempts])
+		// print the ascii code draw
+		fmt.Println(asciiStatesDrawHangman[attempts])
 		displayCurrentState(currentWordState)
 		userInput := getUserInput(scanner)
-
 
 		if !isValidInput(userInput) {
 			fmt.Println("Invalid input  please inter single character")
@@ -57,7 +55,7 @@ func main() {
 
 		if isCorrectGuess && isTheWordCompleted {
 			clearConsole()
-			println("You are the  winner the word is ", word)
+			fmt.Println("You are the  winner the word is ", word)
 			break
 		} else if !isCorrectGuess {
 			attempts--
@@ -65,11 +63,11 @@ func main() {
 		if attempts < 0 {
 			clearConsole()
 			fmt.Println("The man Is dead")
+			fmt.Println("the word was is ", word)
 			break
 		}
 
 	}
-
 }
 
 func getUserInput(scanner *bufio.Scanner) string {
@@ -87,15 +85,14 @@ func initWordState(word string) []string {
 }
 
 func isValidInput(input string) bool {
-  if _,err := strconv.Atoi(input) ; err==nil || utf8.RuneCountInString(input)>1 || input=="" {
-     return false      
-  }
-  return true
+	if _, err := strconv.Atoi(input); err == nil || utf8.RuneCountInString(input) > 1 || input == "" {
+		return false
+	}
+	return true
 }
 
 func displayCurrentState(currentWord []string) {
 	fmt.Println("Current word state : ", strings.Join(currentWord, ""))
-
 }
 
 func updateWordIfCorrect(word string, currentWordState []string, letter string) bool {
@@ -112,12 +109,7 @@ func updateWordIfCorrect(word string, currentWordState []string, letter string) 
 }
 
 func isCompleteWord(word []string) bool {
-	for _, char := range word {
-		if char == "_" {
-			return false
-		}
-	}
-	return true
+	return !slices.Contains(word, "_")
 }
 
 func clearConsole() {

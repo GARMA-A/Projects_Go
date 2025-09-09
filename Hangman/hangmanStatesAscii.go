@@ -1,9 +1,7 @@
 package main
 
-
-
-
-var AsciiStatesDrawHangman = []string{`
+var asciiStatesDrawHangman = []string{
+	`
   +---+
   |   |
   O   |
@@ -13,7 +11,7 @@ var AsciiStatesDrawHangman = []string{`
 =========
 `,
 
-`
+	`
   +---+
   |   |
   O   |
@@ -21,9 +19,9 @@ var AsciiStatesDrawHangman = []string{`
  /    |
       |
 =========
-`, 
+`,
 
-`
+	`
   +---+
   |   |
   O   |
@@ -33,7 +31,7 @@ var AsciiStatesDrawHangman = []string{`
 =========
 `,
 
- `
+	`
   +---+
   |   |
   O   |
@@ -43,7 +41,7 @@ var AsciiStatesDrawHangman = []string{`
 =========
 `,
 
- `
+	`
   +---+
   |   |
   O   |
@@ -62,7 +60,7 @@ var AsciiStatesDrawHangman = []string{`
 =========
 `,
 
- `
+	`
   +---+
   |   |
       |
@@ -70,9 +68,5 @@ var AsciiStatesDrawHangman = []string{`
       |
       |
 =========
-`}
-
-
-
-
-
+`,
+}
